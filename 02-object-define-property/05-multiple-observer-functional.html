@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>Observer 여러개 관리하기</div>
+    <div>
+      <ul>
+        <li>4번 코드를 함수화</li>
+      </ul>
+    </div>
+    <script>
+      let currentObserver = null;
+
+      // 구독자 : 값들을 바라보고있을 함수
+      const observe = (fn) => {
+        currentObserver = fn;
+        fn();
+      };
+
+      // 발행기관 : 관리할 값들을 정의
+      const observerable = (state) => {
+        const stateKeys = Object.keys(state);
+
+        for (const key of stateKeys) {
+          let _value = state[key];
+          const observers = new Set();
+          Object.defineProperty(state, key, {
+            get() {
+              //state의 값이 사용될 때 (get), currentObserver를 observers에 등록한다.
+              if (currentObserver) observers.add(currentObserver);
+              return _value;
+            },
+            set(value) {
+              // state의 값이 변경될 때 (set), observers에 등록된 모든 observer를 실행한다.
+              _value = value;
+              observers.forEach((observer) => observer());
+            },
+          });
+        }
+        return state;
+      };
+
+      const state = observerable({
+        a: 10,
+        b: 20,
+      });
+
+      observe(() => console.log(`a = ${state.a}`));
+      observe(() => console.log(`b = ${state.b}`));
+      observe(() => console.log(`b * b = ${state.b} * ${state.b}`));
+      observe(() => console.log(`a + b = ${state.a} + ${state.b}`));
+      observe(() => console.log(`a * b = ${state.a} * ${state.b}`));
+      observe(() => console.log(`a - b = ${state.a} - ${state.b}`));
+
+      state.a = 1000;
+      state.b = 200;
+    </script>
+  </body>
+</html>

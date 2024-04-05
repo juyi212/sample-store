@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>Observer 여러개 관리하기</div>
+    <div>
+      <ul>
+        <li>
+          이 코드에서 핵심은 함수가 실행될 때 currentObserver가 실행중인 함수를
+          참조하도록 하는 것이다.
+        </li>
+        <li>
+          state의 값이 사용될 때 (get), currentObserver를 observers에 등록한다.
+        </li>
+        <li>
+          state의 값이 변경될 때 (set), observers에 등록된 모든 observer를
+          실행한다.
+        </li>
+        <li>
+          등록 후 바라보고있는 값이 변경될 때마다 구독하고 있는 함수를 실행하게
+          됨.
+        </li>
+      </ul>
+    </div>
+    <script>
+      let currentObserver = null;
+      const state = {
+        a: 10,
+        b: 20,
+      };
+
+      const stateKeys = Object.keys(state);
+
+      for (const key of stateKeys) {
+        let _value = state[key];
+        const observers = new Set();
+        Object.defineProperty(state, key, {
+          get() {
+            if (currentObserver) observers.add(currentObserver);
+            return _value;
+          },
+          set(value) {
+            _value = value;
+            observers.forEach((observer) => observer());
+          },
+        });
+      }
+
+      const 덧셈_계산기 = () => {
+        currentObserver = 덧셈_계산기;
+        console.log(`a + b = ${state.a + state.b}`);
+      };
+
+      const 뺄셈_계산기 = () => {
+        currentObserver = 뺄셈_계산기;
+        console.log(`a - b = ${state.a - state.b}`);
+      };
+      덧셈_계산기();
+      뺄셈_계산기();
+      state.a = 100;
+      state.b = 200;
+    </script>
+  </body>
+</html>

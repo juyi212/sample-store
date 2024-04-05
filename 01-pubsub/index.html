@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>개발자도구에서 콘솔로그를 확인해주세요</div>
+    <script>
+      class Store {
+        #state;
+        #observers = new Set();
+
+        constructor(state) {
+          this.#state = state;
+          Object.keys(state).forEach((key) =>
+            Object.defineProperty(this, key, {
+              get: () => this.#state[key],
+            })
+          );
+        }
+
+        changeState(newState) {
+          this.#state = { ...this.#state, ...newState };
+          this.notifyToSubscriber();
+        }
+
+        registerSubscriber(subscriber) {
+          this.#observers.add(subscriber);
+        }
+
+        notifyToSubscriber() {
+          this.#observers.forEach((fn) => fn());
+        }
+      }
+
+      class Publisher {
+        #fn;
+
+        constructor(newFn) {
+          this.#fn = newFn;
+        }
+
+        publish(publisher) {
+          publisher.registerSubscriber(this.#fn);
+        }
+      }
+
+      const state = new Store({
+        a: 10,
+        b: 20,
+      });
+
+      const test1 = new Publisher(() =>
+        console.log(`a + b = ${state.a + state.b}`)
+      );
+      const test2 = new Publisher(() =>
+        console.log(`a * b = ${state.a * state.b}`)
+      );
+
+      test1.publish(state);
+      test2.publish(state);
+
+      state.notifyToSubscriber();
+      // a + b = 30
+      // a * b = 200
+
+      state.changeState({ a: 100, b: 200 });
+      // a + b = 300
+      // a * b = 20000
+    </script>
+  </body>
+</html>

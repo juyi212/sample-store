@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h3>Object.defineProperty()</h3>
+    <div>
+      <p>특징</p>
+      <ul>
+        <li>프로퍼티 속성에 접근 권한을 설정할 수 있음</li>
+        <li>프로퍼티에 getter, setter를 만들 수 있음</li>
+      </ul>
+    </div>
+    <div>
+      <p>요청 매개변수</p>
+      {'Object.defineProperty() 의 매개변수는 총 3개로 다음과 같습니다.'}
+      <ul>
+        <li>obj : 속성을 정의할 객체</li>
+        <li>prop : 새로 만들거나 수정하려는 속성의 이름</li>
+        <li>descriptor : 객체에 정의하는 속성을 기술하는 객체</li>
+      </ul>
+    </div>
+    <script>
+      let a = 10;
+      const state = {};
+      Object.defineProperty(state, "a", {
+        get() {
+          console.log(`현재 a의 값은 ${a} 입니다.`);
+          return a;
+        },
+        set(value) {
+          a = value;
+          console.log(`변경된 a의 값은 ${a} 입니다.`);
+        },
+      });
+
+      console.log(`state.a = ${state.a}`);
+      state.a = 100;
+      state.a = 1000;
+    </script>
+  </body>
+</html>
