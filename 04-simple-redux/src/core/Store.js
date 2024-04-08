@@ -1,6 +1,6 @@
 import { observerable } from "./core/observer.js";
 
-export const store = (reducer) => {
+export const createStore = (reducer) => {
   const state = observerable(reducer());
 
   const dispatch = (action) => {
