@@ -103,3 +103,8 @@ createStore 에는 state 등록, state 변경, state 조회 이렇게 3가지 �
 - state 변경(dispatch)는 state 값을 변경해야 한다.
 - state 조회(getState)는 state를 직접 반환하면 좋겠지만, state에는 getter, setter가 모두 포함되고 있기 때문에 직접 참조하여 수정이 가능하므로 getter만 가능하도록 frozenState를 따로 만드는 것이다. 이건 다른 방식도 있긴한데, 블로그에서 따로 확인하면 될 것 같다.
   <br>
+
+### Reference
+
+- https://junilhwang.github.io/TIL/Javascript/Design/Vanilla-JS-Store/#_8-%E1%84%89%E1%85%B5%E1%86%B7%E1%84%92%E1%85%AA%E1%84%92%E1%85%A1%E1%86%A8%E1%84%89%E1%85%B3%E1%86%B8
+- https://velog.io/@bepyan/posts
