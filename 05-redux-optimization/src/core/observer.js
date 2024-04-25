@@ -1,4 +1,5 @@
-// observer 등록되는 함수 만들기
+// 앞서 작성한 코드를 다시 단순하게 observable과 observe라는 관계로 만들어보자.
+// observable은 observe 에서 사용된다. observable에 변화가 생기면, observe에 등록된 함수가 실행된다.
 
 //이 코드에서 핵심은, 함수가 실행될 때 currentObsever가 실행중인 함수를 참조하도록 만드는 것 이다.
 let currentObserver = null;
@@ -38,9 +39,11 @@ export const observerable = (state) => {
     Object.defineProperty(state, key, {
       get() {
         if (currentObserver) observers.add(currentObserver);
+
         return _value;
       },
       set(value) {
+        console.log("observers :", observers);
         if (_value === value) return;
 
         _value = value;

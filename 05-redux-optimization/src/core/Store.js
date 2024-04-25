@@ -15,7 +15,7 @@ export const createStore = (reducer) => {
     const newState = reducer(state, action);
 
     for (const [key, value] of Object.entries(newState)) {
-      if (!state[key]) return;
+      if (!state[key]) continue;
       state[key] = value;
     }
   };
