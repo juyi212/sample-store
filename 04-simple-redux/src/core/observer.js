@@ -20,6 +20,9 @@ export const observerable = (state) => {
       },
       set(value) {
         // state의 값이 변경될 때 (set), observers에 등록된 모든 observer를 실행한다.
+        if (_value === value) return;
+        if (JSON.stringify(_value) === JSON.stringify(value)) return;
+
         _value = value;
         observers.forEach((observer) => observer());
       },
